@@ -12,9 +12,6 @@ public class asdcfds {
 
         CoreV1Api api = new CoreV1Api();
 
-        api.app
-
         ApiClient client = new ApiClient();
-        client.
     }
 }
