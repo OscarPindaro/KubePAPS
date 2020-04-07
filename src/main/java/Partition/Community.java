@@ -46,6 +46,14 @@ public class Community {
 
     public void loadOnKube(){
         loadLeader();
-        loadMem
+        loadMembers();
+    }
+
+    private void loadLeader(){
+
+    }
+
+    private void loadMembers(){
+
     }
 }
