@@ -88,6 +88,13 @@ public class prova {
 
 
 
+        V1ReplicaSet replicaSet = null;
+        for(V1ReplicaSet replica : api2.listNamespacedReplicaSet("default", null , null,
+                                                                null, null, null, null
+                                                                , null, null, null ).getItems())
+        {
+            api2.replaceNamespacedReplicaSet(replica.getMetadata().getName(), "default", replica, null, null);
+        }
 
     }
 }

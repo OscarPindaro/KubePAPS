@@ -31,7 +31,7 @@ public class Community {
         setRoleLabel(node, Role.LEADER);
     }
 
-    public void setRoleLabel(V1Node node, Role role){
+    private void setRoleLabel(V1Node node, Role role){
         V1ObjectMeta metadata = node.getMetadata();
         metadata = metadata.putLabelsItem(ROLE_KEY, role.toString()).putLabelsItem(COMMUNITY_KEY, this.name);
         node.setMetadata(metadata);
