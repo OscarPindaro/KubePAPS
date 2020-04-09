@@ -86,7 +86,7 @@ public class prova {
         api2.replaceNamespacedDeployment(myDep.getMetadata().getName(), myDep.getMetadata().getNamespace(), myDep, null
                                         ,null );
 
-        
+
 
 
     }
