@@ -12,7 +12,7 @@ public class Memory {
     //constructor
     public Memory(String nodeID){
 
-        this.totLabelReceived = 1;
+        this.totLabelReceived = 0;
         this.memory = new HashMap<String, Integer>();
         this.updateMemory(nodeID);
 
@@ -24,7 +24,7 @@ public class Memory {
         return totLabelReceived;
     }
 
-    public void updateTotLabelReceived() {
+    private void updateTotLabelReceived() {
         this.totLabelReceived = totLabelReceived +1;
     }
 
@@ -37,11 +37,12 @@ public class Memory {
 
         if (memory.containsKey(label)){
             previousValue = memory.get(label);
-            memory.put(label, previousValue+1);
+            memory.put(label, previousValue + 1);
             this.updateTotLabelReceived();
         }
         else{
             memory.put(label, 1);
+            this.updateTotLabelReceived();
         }
     }
 
@@ -55,14 +56,16 @@ public class Memory {
 
     }
 
-
-    public static void main(String[] args) {
+// debug test
+/*    public static void main(String[] args) {
         Memory memoriaProva = new Memory("fabio");
         System.out.println(memoriaProva.getMemory());
         memoriaProva.updateMemory("fabio");
         memoriaProva.updateMemory("oscar");
+        memoriaProva.updateMemory("oscar");
+        memoriaProva.updateMemory("enka");
         System.out.println(memoriaProva.getMemory());
         System.out.println(memoriaProva.getTotLabelReceived());
 
-    }
+    }*/
 }
