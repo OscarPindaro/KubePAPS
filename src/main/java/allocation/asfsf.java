@@ -1,4 +1,4 @@
-package Allocation;
+package allocation;
 
 public class asfsf {
 }

@@ -1027,7 +1027,7 @@
 											"top": 183,
 											"width": 139.115234375,
 											"height": 13,
-											"text": "Allocation"
+											"text": "allocation"
 										},
 										{
 											"_type": "LabelView",
@@ -1222,7 +1222,7 @@
 											"top": 183,
 											"width": 65.03173828125,
 											"height": 13,
-											"text": "Placement"
+											"text": "placement"
 										},
 										{
 											"_type": "LabelView",
@@ -2570,7 +2570,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Allocation",
+					"name": "allocation",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -2618,7 +2618,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Placement",
+					"name": "placement",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",

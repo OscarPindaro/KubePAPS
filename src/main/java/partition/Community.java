@@ -1,10 +1,9 @@
-package Partition;
+package partition;
 
-import io.kubernetes.client.ApiClient;
+import io.kubernetes.client.ApiException;
 import io.kubernetes.client.models.V1Node;
-import io.kubernetes.client.models.V1NodeBuilder;
 import io.kubernetes.client.models.V1ObjectMeta;
-import io.kubernetes.client.proto.V1;
+import kubernetesApiWrapper.KubeApi;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,31 +28,36 @@ public class Community {
     public void addLeader(V1Node node){
         this.leader = node;
         setRoleLabel(node, Role.LEADER);
+        setCommunityLabel(node);
     }
-
-    private void setRoleLabel(V1Node node, Role role){
-        V1ObjectMeta metadata = node.getMetadata();
-        metadata = metadata.putLabelsItem(ROLE_KEY, role.toString()).putLabelsItem(COMMUNITY_KEY, this.name);
-        node.setMetadata(metadata);
-    }
-
 
     public void addMember(V1Node member){
         if (members.contains(member)) throw new RuntimeException("This member is already present in the community");
         members.add(member);
         setRoleLabel(member, Role.MEMBER);
+        setCommunityLabel(member);
     }
 
-    public void loadOnKube(){
-        loadLeader();
-        loadMembers();
+    private void setRoleLabel(V1Node node, Role role){
+        V1ObjectMeta metadata = node.getMetadata();
+        metadata = metadata.putLabelsItem(ROLE_KEY, role.toString());
+        node.setMetadata(metadata);
     }
 
-    private void loadLeader(){
-
+    private void setCommunityLabel(V1Node node){
+        V1ObjectMeta metadata = node.getMetadata();
+        metadata = metadata.putLabelsItem(COMMUNITY_KEY, this.name);
+        node.setMetadata(metadata);
     }
 
-    private void loadMembers(){
-
+    public void loadOnKube() throws ApiException {
+        //load leader
+        KubeApi.updateNode(leader);
+        //load community members
+        for(V1Node member : members){
+            KubeApi.updateNode(member);
+        }
     }
+
+
 }

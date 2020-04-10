@@ -1,4 +1,4 @@
-package Partition;
+package partition;
 
 public class SPLA_Node {
 
