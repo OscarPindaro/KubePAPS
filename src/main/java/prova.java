@@ -52,12 +52,12 @@ public class prova {
                 .build();
 
 
-        V1ReplicaSet pisello = appsApi.listReplicaSetForAllNamespaces(null, null, null
+        V1ReplicaSet replicaSet = appsApi.listReplicaSetForAllNamespaces(null, null, null
         ,null, null, null, null, null, null ).getItems().get(0);
-        System.out.println(pisello.getMetadata().getName());
-        if(pisello.getMetadata().getName().contains("frontend")){
-            pisello.getSpec().setReplicas(10);
-            appsApi.replaceNamespacedReplicaSet(pisello.getMetadata().getName(), "default", pisello, null, null);
+        System.out.println(replicaSet.getMetadata().getName());
+        if(replicaSet.getMetadata().getName().contains("frontend")){
+            replicaSet.getSpec().setReplicas(10);
+            appsApi.replaceNamespacedReplicaSet(replicaSet.getMetadata().getName(), "default", replicaSet, null, null);
         }
 
     }
