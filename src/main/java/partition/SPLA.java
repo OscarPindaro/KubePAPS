@@ -3,13 +3,13 @@ package partition;
 import io.kubernetes.client.models.V1Node;
 import kubernetesApiWrapper.KubeApi;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class SPLA {
 
     private List<SPLA_Node> topologyNodes;
 
+    // constructor
     public SPLA(float[][] delayMatrix, float delayThreshold) throws io.kubernetes.client.ApiException {
 
         List<V1Node> kubeNodes = KubeApi.getNodeList();
@@ -27,7 +27,7 @@ public class SPLA {
     }
 
 
-
+    // functions
     private void computeTopologyMatrix(float[][] delayMatrix, float delayThreshold){
 
         for (int i = 0; i < delayMatrix.length ; i++) {
@@ -39,6 +39,41 @@ public class SPLA {
             }
         }
 
+    }
+
+    public List<Community> computeCommunities(int numberOfIterations, float probabilityThrashold) {
+
+        List<SPLA_Node> listenerOrder = topologyNodes;
+
+        for (int i = 0; i < numberOfIterations ; i++) {
+
+            Collections.shuffle(listenerOrder);
+
+            for (SPLA_Node listener : listenerOrder) {
+
+                List<SPLA_Node> speakers = listener.getNearbyNodes();
+                List<String> receivedLabels = new ArrayList<>(speakers.size());
+
+                if (speakers.isEmpty()){
+                    throw new NullPointerException("This listener has no nearby nodes, speaker list is empty");
+                }
+                else{
+                    Collections.shuffle(speakers);
+                }
+
+                for (SPLA_Node speaker : speakers) {
+                    receivedLabels.add(speaker.speak());
+                }
+
+                listener.addToMemory(listener.listen(receivedLabels));
+                listener.setLabelToSpread();
+
+            }
+
+        }
+
+
+        return ;
     }
 
 
