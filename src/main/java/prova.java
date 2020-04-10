@@ -27,13 +27,38 @@ public class prova {
         V1Deployment r =appsApi.listDeploymentForAllNamespaces(null, null ,null, null, null, null
         ,null, null, null).getItems().get(0);
 
+        /*
         V1DeploymentBuilder builder = new V1DeploymentBuilder(new V1Deployment());
         V1Deployment dep = builder
                 .withNewMetadata()
                 .withName("marcello")
                 .endMetadata()
                 .withSpec(r.getSpec()).build();
-        dep
+        dep.getSpec().setReplicas(3);
+        System.out.println(dep.getSpec().getReplicas());
+        appsApi.createNamespacedDeployment("default", dep, null, null, null);
+        */
+
+        V1ReplicaSetBuilder  builder = new V1ReplicaSetBuilder(new V1ReplicaSet());
+        V1ReplicaSet rep =builder.withNewMetadata()
+                    .addToLabels("fabio", "Losavio")
+                    .withName("robertooo").
+                endMetadata()
+                .withNewSpec()
+                    .withReplicas(3)
+                    .withNewTemplateLike(r.getSpec().getTemplate())
+                    .endTemplate()
+                .endSpec()
+                .build();
+
+
+        V1ReplicaSet pisello = appsApi.listReplicaSetForAllNamespaces(null, null, null
+        ,null, null, null, null, null, null ).getItems().get(0);
+        System.out.println(pisello.getMetadata().getName());
+        if(pisello.getMetadata().getName().contains("frontend")){
+            pisello.getSpec().setReplicas(10);
+            appsApi.replaceNamespacedReplicaSet(pisello.getMetadata().getName(), "default", pisello, null, null);
+        }
 
     }
 
