@@ -11,12 +11,18 @@ import io.kubernetes.client.proto.Meta;
 import io.kubernetes.client.proto.V1beta1Apiextensions;
 import io.kubernetes.client.util.ClientBuilder;
 import io.kubernetes.client.util.KubeConfig;
+import kubernetesApiWrapper.KubeApi;
 
 import java.io.FileReader;
 
 public class prova {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args)  throws Exception{
+        KubeApi.setUpApi("/home/oscar/.kube/config");
+        System.out.println(KubeApi.getNodeList());
+    }
+
+    public static void proveVarie(String[] args) throws Exception{
 
         // file path to your KubeConfig
         String kubeConfigPath = "/home/oscar/.kube/config";
@@ -88,6 +94,13 @@ public class prova {
 
 
 
+        V1ReplicaSet replicaSet = null;
+        for(V1ReplicaSet replica : api2.listNamespacedReplicaSet("default", null , null,
+                                                                null, null, null, null
+                                                                , null, null, null ).getItems())
+        {
+            api2.replaceNamespacedReplicaSet(replica.getMetadata().getName(), "default", replica, null, null);
+        }
 
     }
 }

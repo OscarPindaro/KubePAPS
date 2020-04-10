@@ -1,7 +1,8 @@
-package Partition;
+package partition;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class SPLA_Node {
 
@@ -42,10 +43,27 @@ public class SPLA_Node {
         this.nearbyNodes = nearbyNodes;
     }
 
+
+
+
     public String labelToSpread(Memory memory) {
 
         String selectedlabel;
 
         return selectedlabel;
     }
+
+
+    public void extractLabel(){
+        int gaussianSum = individuals.size()*(individuals.size()-1)/2;
+        int selectionValue = new Random().nextInt(gaussianSum);
+        int sum= 0;
+        int pos= 0;
+        while( sum < selectionValue){
+            pos++;
+            sum += pos;
+        }
+        return new Individual(individuals.get(pos-1));
+    }
+}
 }

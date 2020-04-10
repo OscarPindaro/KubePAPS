@@ -1,4 +1,4 @@
-package Partition;
+package partition;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,12 +38,11 @@ public class Memory {
         if (memory.containsKey(label)){
             previousValue = memory.get(label);
             memory.put(label, previousValue + 1);
-            this.updateTotLabelReceived();
         }
         else{
             memory.put(label, 1);
-            this.updateTotLabelReceived();
         }
+        this.updateTotLabelReceived();
     }
 
 
