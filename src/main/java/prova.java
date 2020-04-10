@@ -8,6 +8,8 @@ import io.kubernetes.client.apis.AppsV1beta1Api;
 import io.kubernetes.client.apis.CoreV1Api;
 import io.kubernetes.client.models.*;
 import io.kubernetes.client.proto.Meta;
+import io.kubernetes.client.proto.V1;
+import io.kubernetes.client.proto.V1Apps;
 import io.kubernetes.client.proto.V1beta1Apiextensions;
 import io.kubernetes.client.util.ClientBuilder;
 import io.kubernetes.client.util.KubeConfig;
@@ -19,7 +21,45 @@ public class prova {
 
     public static void main(String[] args)  throws Exception{
         KubeApi.setUpApi("/home/oscar/.kube/config");
-        System.out.println(KubeApi.getNodeList());
+        CoreV1Api coreApi = new CoreV1Api();
+        AppsV1Api appsApi = new AppsV1Api();
+
+        V1Deployment r =appsApi.listDeploymentForAllNamespaces(null, null ,null, null, null, null
+        ,null, null, null).getItems().get(0);
+
+        /*
+        V1DeploymentBuilder builder = new V1DeploymentBuilder(new V1Deployment());
+        V1Deployment dep = builder
+                .withNewMetadata()
+                .withName("marcello")
+                .endMetadata()
+                .withSpec(r.getSpec()).build();
+        dep.getSpec().setReplicas(3);
+        System.out.println(dep.getSpec().getReplicas());
+        appsApi.createNamespacedDeployment("default", dep, null, null, null);
+        */
+
+        V1ReplicaSetBuilder  builder = new V1ReplicaSetBuilder(new V1ReplicaSet());
+        V1ReplicaSet rep =builder.withNewMetadata()
+                    .addToLabels("fabio", "Losavio")
+                    .withName("robertooo").
+                endMetadata()
+                .withNewSpec()
+                    .withReplicas(3)
+                    .withNewTemplateLike(r.getSpec().getTemplate())
+                    .endTemplate()
+                .endSpec()
+                .build();
+
+
+        V1ReplicaSet pisello = appsApi.listReplicaSetForAllNamespaces(null, null, null
+        ,null, null, null, null, null, null ).getItems().get(0);
+        System.out.println(pisello.getMetadata().getName());
+        if(pisello.getMetadata().getName().contains("frontend")){
+            pisello.getSpec().setReplicas(10);
+            appsApi.replaceNamespacedReplicaSet(pisello.getMetadata().getName(), "default", pisello, null, null);
+        }
+
     }
 
     public static void proveVarie(String[] args) throws Exception{
