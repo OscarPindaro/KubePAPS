@@ -8,6 +8,7 @@ import io.kubernetes.client.apis.AppsV1beta1Api;
 import io.kubernetes.client.apis.CoreV1Api;
 import io.kubernetes.client.models.*;
 import io.kubernetes.client.proto.Meta;
+import io.kubernetes.client.proto.V1;
 import io.kubernetes.client.proto.V1Apps;
 import io.kubernetes.client.proto.V1beta1Apiextensions;
 import io.kubernetes.client.util.ClientBuilder;
@@ -23,16 +24,16 @@ public class prova {
         CoreV1Api coreApi = new CoreV1Api();
         AppsV1Api appsApi = new AppsV1Api();
 
-        V1ReplicaSet r =appsApi.listReplicaSetForAllNamespaces(null, null ,null, null, null, null
+        V1Deployment r =appsApi.listDeploymentForAllNamespaces(null, null ,null, null, null, null
         ,null, null, null).getItems().get(0);
 
-
-        V1ReplicaSet replicaSet = new V1ReplicaSet();
-        replicaSet.getSpec().setReplicas(2);
-        replicaSet.getSpec().setTemplate(r.getSpec().getTemplate());
-        System.out.println(replicaSet);
-
-
+        V1DeploymentBuilder builder = new V1DeploymentBuilder(new V1Deployment());
+        V1Deployment dep = builder
+                .withNewMetadata()
+                .withName("marcello")
+                .endMetadata()
+                .withSpec(r.getSpec()).build();
+        dep
 
     }
 
