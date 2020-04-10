@@ -1,5 +1,7 @@
 package partition;
 
+import io.kubernetes.client.models.V1Node;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -13,11 +15,11 @@ public class SPLA_Node {
     private final List<SPLA_Node> nearbyNodes;    //store all the connected nodes, used to set speakers
 
     //constructor
-    public SPLA_Node(String nodeName) {
+    public SPLA_Node(V1Node node) {
 
-        this.nodeID = nodeName;
-        this.currentLabel = nodeName;
-        this.memory = new Memory(nodeName);
+        this.nodeID = node.getMetadata().getNamespace();
+        this.currentLabel = node.getMetadata().getNamespace();
+        this.memory = new Memory(node.getMetadata().getNamespace());
         this.nearbyNodes = new LinkedList<>();
 
     }
@@ -28,41 +30,33 @@ public class SPLA_Node {
     public String getCurrentLabel() { return currentLabel; }
 
     public void computeCurrentLabel() {
-        this.currentLabel = labelToSpread(this.memory);
+        this.currentLabel = labelToSpread(memory.returnSortedLabels());
     }
 
     public Memory getMemory() { return memory; }
 
-    public void addToMemory(String nodeToAdd) {
-        this.memory.updateMemory(nodeToAdd);
+    public void addToMemory(String labelToAdd) {
+        this.memory.updateMemory(labelToAdd);
     }
 
     public List<SPLA_Node> getNearbyNodes() { return nearbyNodes; }
 
-    public void setNearbyNodes(int numberOfNearbyNodes) {
-        this.nearbyNodes = nearbyNodes;
-    }
+    public void addNearbyNode(SPLA_Node nearbyNode) { this.nearbyNodes.add(nearbyNode); }
 
 
 
 
-    public String labelToSpread(Memory memory) {
+    public String labelToSpread(List<String> sortedLabels) {
 
-        String selectedlabel;
-
-        return selectedlabel;
-    }
-
-
-    public void extractLabel(){
-        int gaussianSum = individuals.size()*(individuals.size()-1)/2;
-        int selectionValue = new Random().nextInt(gaussianSum);
-        int sum= 0;
-        int pos= 0;
+        int selectionValue = new Random().nextInt(memory.getTotLabelReceived());
+        int sum = 0;
+        int pos = 0;
         while( sum < selectionValue){
             pos++;
-            sum += pos;
+            sum += memory.getOccurrences(sortedLabels.get(pos-1));
         }
-        return new Individual(individuals.get(pos-1));
+
+        return sortedLabels.get(pos-1);
     }
+
 }
