@@ -66,4 +66,3 @@ public class SPLA_Node {
         return new Individual(individuals.get(pos-1));
     }
 }
-}

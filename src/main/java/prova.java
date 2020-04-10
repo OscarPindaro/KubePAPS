@@ -8,6 +8,7 @@ import io.kubernetes.client.apis.AppsV1beta1Api;
 import io.kubernetes.client.apis.CoreV1Api;
 import io.kubernetes.client.models.*;
 import io.kubernetes.client.proto.Meta;
+import io.kubernetes.client.proto.V1Apps;
 import io.kubernetes.client.proto.V1beta1Apiextensions;
 import io.kubernetes.client.util.ClientBuilder;
 import io.kubernetes.client.util.KubeConfig;
@@ -19,7 +20,20 @@ public class prova {
 
     public static void main(String[] args)  throws Exception{
         KubeApi.setUpApi("/home/oscar/.kube/config");
-        System.out.println(KubeApi.getNodeList());
+        CoreV1Api coreApi = new CoreV1Api();
+        AppsV1Api appsApi = new AppsV1Api();
+
+        V1ReplicaSet r =appsApi.listReplicaSetForAllNamespaces(null, null ,null, null, null, null
+        ,null, null, null).getItems().get(0);
+
+
+        V1ReplicaSet replicaSet = new V1ReplicaSet();
+        replicaSet.getSpec().setReplicas(2);
+        replicaSet.getSpec().setTemplate(r.getSpec().getTemplate());
+        System.out.println(replicaSet);
+
+
+
     }
 
     public static void proveVarie(String[] args) throws Exception{
