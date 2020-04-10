@@ -22,7 +22,7 @@ public class Community {
     public Community(String name){
         this.name = name;
         leader = null;
-        members = new LinkedList<V1Node>();
+        members = new LinkedList<>();
     }
 
     public void addLeader(V1Node node){
