@@ -1,12 +1,15 @@
 package allocation;
 
+import partition.Community;
 import service.Service;
 import service.ServiceCatalog;
 import service.ServiceWorkload;
 
 import java.util.Set;
 import java.util.stream.DoubleStream;
-import  it.polimi.ppap.solver.OplModSolver;
+
+import solver.OplModSolver;
+
 
 public class CommunityLeaderBehaviour {
 
@@ -47,8 +50,22 @@ public class CommunityLeaderBehaviour {
 
     //TODO decidere se le richieste del workload le fa il leader o sono i membri che gliele mandano
     private void updateDemandFromStaticAllocation(final FogNode member, final Service service,final float workload){
-        final float demandFromMember = NodeFacade.getStaticAllocation(workload, service.getRT(), memberStateHolder.getReferenceControlPeriod());
+        final float demandFromMember = CommunityLeaderBehaviour.getStaticAllocation(workload, service.getRT(), memberStateHolder.getReferenceControlPeriod());
         memberStateHolder.updateServiceDemand(member, service, demandFromMember);
+    }
+
+
+    /**
+     * This method was originally in the NodeFacade class, but it depends only on the inputs given, so moving this method
+     * in this class should not have any bad effect.
+     * @param interArrivalMillis
+     * @param targetResponseTimeMillis
+     * @param controlPeriodMillis
+     * @return
+     */
+    private static float getStaticAllocation(float interArrivalMillis, float targetResponseTimeMillis, float controlPeriodMillis){
+        float req = controlPeriodMillis/interArrivalMillis;
+        return Planner.computeStaticAllocation(req, targetResponseTimeMillis);
     }
 
     /**
@@ -61,17 +78,17 @@ public class CommunityLeaderBehaviour {
     }
 
     private void solvePlacementAllocation(){
-        OplModSolver oplModSolver = new it.polimi.ppap.solver.OplModSolver();
+        OplModSolver oplModSolver = new OplModSolver();
         oplModSolver.generateData(ServiceCatalog.getServiceCatalog(), memberStateHolder.getNodeServiceDemand(), memberStateHolder.getOptimizationBeta());
         try {
             memberStateHolder.setNodeServiceAllocation(oplModSolver.solve(memberStateHolder.getNodeServiceDemand(), false));
-        } catch (it.polimi.ppap.solver.OplModSolver.OplSolutionNotFoundException ex){
+        } catch (OplModSolver.OplSolutionNotFoundException ex){
             memberStateHolder.setNodeServiceAllocation(oplModSolver.solve(memberStateHolder.getNodeServiceDemand(), true));
         }
     }
 
     //TODO chiamate di rete, dovremo usare un'interfaccia per ora
-    private void sendPlanToMembers(){
+    private void sendPlanToMembers(FogNode node){
 
     }
 }

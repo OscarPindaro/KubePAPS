@@ -41,9 +41,9 @@ public class OplModSolver {
         try {
             new File(oplResultsFilePath).delete();
             if(!relaxations)
-                it.polimi.ppap.solver.OplRun.oplRun(new String[]{"-v", "-de", oplResultsFilePath, oplModelFilePath, oplDataFilePath});
+                OplRun.oplRun(new String[]{"-v", "-de", oplResultsFilePath, oplModelFilePath, oplDataFilePath});
             else
-                it.polimi.ppap.solver.OplRun.oplRun(new String[]{"-relax", "-v", "-de", oplResultsFilePath, oplModelFilePath, oplDataFilePath});
+                OplRun.oplRun(new String[]{"-relax", "-v", "-de", oplResultsFilePath, oplModelFilePath, oplDataFilePath});
             String output;
             Map<FogNode, Map<Service, AggregateServiceAllocation>> solution;
             if(new File(oplResultsFilePath).exists()) {

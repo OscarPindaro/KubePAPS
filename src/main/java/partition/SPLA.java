@@ -41,40 +41,40 @@ public class SPLA {
 
     }
 
-    public List<Community> computeCommunities(int numberOfIterations, float probabilityThrashold) {
-
-        List<SPLA_Node> listenerOrder = topologyNodes;
-
-        for (int i = 0; i < numberOfIterations ; i++) {
-
-            Collections.shuffle(listenerOrder);
-
-            for (SPLA_Node listener : listenerOrder) {
-
-                List<SPLA_Node> speakers = listener.getNearbyNodes();
-                List<String> receivedLabels = new ArrayList<>(speakers.size());
-
-                if (speakers.isEmpty()){
-                    throw new NullPointerException("This listener has no nearby nodes, speaker list is empty");
-                }
-                else{
-                    Collections.shuffle(speakers);
-                }
-
-                for (SPLA_Node speaker : speakers) {
-                    receivedLabels.add(speaker.speak());
-                }
-
-                listener.addToMemory(listener.listen(receivedLabels));
-                listener.setLabelToSpread();
-
-            }
-
-        }
-
-
-        return ;
-    }
+//    public List<Community> computeCommunities(int numberOfIterations, float probabilityThrashold) {
+//
+//        List<SPLA_Node> listenerOrder = topologyNodes;
+//
+//        for (int i = 0; i < numberOfIterations ; i++) {
+//
+//            Collections.shuffle(listenerOrder);
+//
+//            for (SPLA_Node listener : listenerOrder) {
+//
+//                List<SPLA_Node> speakers = listener.getNearbyNodes();
+//                List<String> receivedLabels = new ArrayList<>(speakers.size());
+//
+//                if (speakers.isEmpty()){
+//                    throw new NullPointerException("This listener has no nearby nodes, speaker list is empty");
+//                }
+//                else{
+//                    Collections.shuffle(speakers);
+//                }
+//
+//                for (SPLA_Node speaker : speakers) {
+//                    receivedLabels.add(speaker.speak());
+//                }
+//
+//                listener.addToMemory(listener.listen(receivedLabels));
+//                listener.setLabelToSpread();
+//
+//            }
+//
+//        }
+//
+//
+//        return ;
+//    }
 
 
 }

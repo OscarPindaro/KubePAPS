@@ -1,6 +1,7 @@
 package allocation;
 
 import io.kubernetes.client.models.V1Node;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class CommunityProtocol {
     }
 
     private boolean isAllMonitoringReceived(){
-
+        throw new NotImplementedException();
     }
 
     private void processLeaderMessage(){
