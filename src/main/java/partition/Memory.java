@@ -1,17 +1,14 @@
 package partition;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Memory {
 
-    //variables
-    private final Map<String, Integer> memory;    //String will contain a label and integer will represent the number of occurrences.
-    private int totLabelReceived;
+    // attributes
+    private final Map<String, Integer> memory;    //String will contain a label and Integer will represent the number of occurrences.
+    private int totLabelReceived;   // the number of all the labels received
 
-    //constructor
+    // constructor
     public Memory(String nodeID){
 
         this.totLabelReceived = 0;
@@ -21,7 +18,7 @@ public class Memory {
     }
 
 
-    //getters and setters
+    // getters and setters
     public int getTotLabelReceived() {
         return totLabelReceived;
     }
@@ -31,6 +28,8 @@ public class Memory {
     }
 
     public Map<String, Integer> getMemory() { return new HashMap<String, Integer>(memory); }
+
+    public Set<String> getDifferentReceivedLabels() { return memory.keySet(); }
 
     public void updateMemory(String label) {
         int previousValue;
@@ -70,7 +69,7 @@ public class Memory {
     }
 
 
-/*    // debug test
+/*    // debug
     public static void main(String[] args) {
         Memory memoriaProva = new Memory("fabio");
         System.out.println(memoriaProva.getMemory());
