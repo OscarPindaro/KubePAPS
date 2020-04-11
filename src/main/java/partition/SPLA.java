@@ -96,7 +96,9 @@ public class SPLA {
                     selectedCommunity.addMember(node.getKubeNode());
                 }
 
-               // if(returnCommunities.contains(selectedCommunity))
+                if(!returnCommunities.contains(selectedCommunity)){
+                    returnCommunities.add(selectedCommunity);
+                }
 
             }
             else if (communityCandidates.size() > 1){
