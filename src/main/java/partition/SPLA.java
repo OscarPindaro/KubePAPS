@@ -1,5 +1,6 @@
 package partition;
 
+import io.kubernetes.client.ApiException;
 import io.kubernetes.client.models.V1Node;
 import kubernetesApiWrapper.KubeApi;
 
@@ -10,7 +11,7 @@ public class SPLA {
     private List<SPLA_Node> topologyNodes;
 
     // constructor
-    public SPLA(float[][] delayMatrix, float delayThreshold) throws io.kubernetes.client.ApiException {
+    public SPLA(float[][] delayMatrix, float delayThreshold) throws ApiException {
 
         List<V1Node> kubeNodes = KubeApi.getNodeList();
         kubeNodes.sort(Comparator.comparing(a -> a.getMetadata().getName()));
