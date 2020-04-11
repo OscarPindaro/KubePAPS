@@ -5,19 +5,19 @@ import kubernetesApiWrapper.KubeApi;
 
 import java.util.*;
 
-public class SPLA {
+public class SLPA {
 
-    private List<SPLA_Node> topologyNodes;
+    private List<SLPA_Node> topologyNodes;
 
     // constructor
-    public SPLA(float[][] delayMatrix, float delayThreshold) throws io.kubernetes.client.ApiException {
+    public SLPA(float[][] delayMatrix, float delayThreshold) throws io.kubernetes.client.ApiException {
 
         List<V1Node> kubeNodes = KubeApi.getNodeList();
         kubeNodes.sort(Comparator.comparing(a -> a.getMetadata().getName()));
 
         if (!kubeNodes.isEmpty()) {
             for (V1Node node : kubeNodes) {
-                topologyNodes.add(new SPLA_Node(node));
+                topologyNodes.add(new SLPA_Node(node));
             }
             computeTopologyMatrix(delayMatrix, delayThreshold);
         }
@@ -47,16 +47,16 @@ public class SPLA {
         List<Community> returnCommunities = new LinkedList<>();
         CommunityBuilder communityBuilder = new CommunityBuilder();
 
-        List<SPLA_Node> listenerOrder = topologyNodes;
+        List<SLPA_Node> listenerOrder = topologyNodes;
 
         // algorithm evolution, spread labels for a given number of iterations, ideal number is 20 iterations
         for (int i = 0; i < numberOfIterations ; i++) {
 
             Collections.shuffle(listenerOrder);
 
-            for (SPLA_Node listener : listenerOrder) {
+            for (SLPA_Node listener : listenerOrder) {
 
-                List<SPLA_Node> speakers = listener.getNearbyNodes();
+                List<SLPA_Node> speakers = listener.getNearbyNodes();
                 List<String> receivedLabels = new ArrayList<>(speakers.size());
 
                 if (speakers.isEmpty()){
@@ -66,11 +66,11 @@ public class SPLA {
                     Collections.shuffle(speakers);
                 }
 
-                for (SPLA_Node speaker : speakers) {
+                for (SLPA_Node speaker : speakers) {
                     receivedLabels.add(speaker.speak());
                 }
 
-                listener.addToMemory(SPLA_Node.listen(receivedLabels));
+                listener.addToMemory(SLPA_Node.listen(receivedLabels));
                 listener.setLabelToSpread();
 
             }
@@ -78,7 +78,7 @@ public class SPLA {
         }
 
         // post processing to set the communities
-        for (SPLA_Node node : topologyNodes) {
+        for (SLPA_Node node : topologyNodes) {
 
             Set<String> communityCandidates = node.getMemory().getDifferentReceivedLabels();
 
@@ -111,6 +111,10 @@ public class SPLA {
                 }
                 else{
                     selectedCommunity.addMember(node.getKubeNode());
+                }
+
+                if(!returnCommunities.contains(selectedCommunity)){
+                    returnCommunities.add(selectedCommunity);
                 }
 
             }
