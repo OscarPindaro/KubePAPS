@@ -37,14 +37,14 @@ public class CommunityProtocol extends MemberStateHolder{
         updateNodeServiceWorkload(memberMessage.getSender(), memberMessage.getLocalServiceWorkloadHistory());
         storeNodeWorkloadAllocation(memberMessage.getSender(), memberMessage.getWorkloadAllocation());
         incMonitoringCount();
-        if(isAllMonitoringReceived(getMonitoringCount(), node, pid)) {
+        if(isAllMonitoringReceived()) {
             communityLeaderBehaviour.analyze(node, pid);
             communityLeaderBehaviour.plan(node, pid);
             resetMonitoringCount();
         }
     }
 
-    private void updateNodeServiceWorkload((FogNode sender, Map<Service, Set<ServiceWorkload>> localServiceWorkloadHistory){
+    private void updateNodeServiceWorkload(FogNode sender, Map<Service, Set<ServiceWorkload>> localServiceWorkloadHistory){
         Map<Service, Set<ServiceWorkload>> nodeServiceWorkloads = nodeServiceWorkload.getOrDefault(sender, new TreeMap<>());
         nodeServiceWorkload.put(sender, nodeServiceWorkloads);
         for(Service service : ServiceCatalog.getServiceCatalog()) {
@@ -59,16 +59,22 @@ public class CommunityProtocol extends MemberStateHolder{
         }
     }
 
-    private void storeNodeWorkloadAllocation(){
-
+    private void storeNodeWorkloadAllocation(FogNode sender, Map<Service, Map.Entry<Float, Float>> currentWorkloadAllocation){
+        for(Service service : currentWorkloadAllocation.keySet()) {
+            if(!workloadAllocationHistory.containsKey(service))
+                workloadAllocationHistory.put(service, new TreeMap<>());
+            Map.Entry<Float, Float> workloadAllocation = currentWorkloadAllocation.get(service);
+            if(workloadAllocation.getValue() > 0)
+                workloadAllocationHistory.get(service).put(1 / workloadAllocation.getKey(), workloadAllocation.getValue());
+        }
     }
 
     private boolean isAllMonitoringReceived(){
-        throw new NotImplementedException();
+       return getMonitoringCount() == getCommunitySize();
     }
 
     private void processLeaderMessage(){
-
+        throw new NotImplementedException();
     }
 
 }

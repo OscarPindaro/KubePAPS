@@ -21,7 +21,7 @@ public class CommunityLeaderBehaviour {
 
 
     //TODO pid non viene usato e non capisco  a cosa serva, forse lo tolgo
-    public void analize(final FogNode node, final int pid) {
+    public void analyze(final FogNode node, final int pid) {
         memberStateHolder.getNodeServiceDemand().clear();
         for(FogNode member : memberStateHolder.getNodeServiceWorkload().keySet()){
             for(Service service : ServiceCatalog.getServiceCatalog()) {
@@ -72,7 +72,7 @@ public class CommunityLeaderBehaviour {
      * c'era anche un parametro pid ma lo sto ignorando
      * @param node
      */
-    public void plan(FogNode node){
+    public void plan(FogNode node, int pid){
         solvePlacementAllocation();
         sendPlanToMembers(node);
     }
