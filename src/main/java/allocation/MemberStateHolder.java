@@ -45,8 +45,18 @@ public abstract class MemberStateHolder {
 
     int monitoringCount;
 
+    int communitySize;
+
     public int getMonitoringCount() {
         return monitoringCount;
+    }
+
+    public int getCommunitySize(){
+        return communitySize;
+    }
+
+    public void setCommunitySize(int size){
+        this.communitySize = size;
     }
 
     public void incMonitoringCount() {
