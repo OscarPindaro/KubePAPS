@@ -1,5 +1,6 @@
 package allocation;
 
+import service.AggregateServiceAllocation;
 import service.Service;
 import service.ServiceDemand;
 import service.ServiceWorkload;
@@ -104,19 +105,4 @@ public abstract class MemberStateHolder {
         this.nodeServiceAllocation = nodeServiceAllocation;
     }
 
-    /**
-     * Overrides the clone method, as required by PeerSim.
-     * TODO Check if we need to properly implement this (i.e. clone the member's state)
-     * @return
-     */
-    @Override
-    public Object clone() {
-        MemberStateHolder svh=null;
-        try {
-            svh=(MemberStateHolder)super.clone();
-        }catch(CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        return svh;
-    }
 }
