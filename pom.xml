@@ -27,6 +27,23 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.8.0-beta2</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/cplex/cplex -->
+        <!--dependency>
+            <groupId>cplex</groupId>
+            <artifactId>cplex</artifactId>
+            <version>12.8.0</version>
+        </dependency -->
+        <!--
+        <configuration>
+            <forkMode>once</forkMode>
+            <argLine>-Djava.library.path=/Applications/CPLEX_Studio_Community128/opl/bin/x86-64_osx/ -DLD_LIBRARY_PATH=/Applications/CPLEX_Studio_Community128/opl/bin/x86-64_osx/</argLine>
+            <environmentVariables>
+                <LD_LIBRARY_PATH>/Applications/CPLEX_Studio_Community128/opl/bin/x86-64_osx/</LD_LIBRARY_PATH>
+                <DYLD_LIBRARY_PATH>/Applications/CPLEX_Studio_Community128/opl/bin/x86-64_osx/</DYLD_LIBRARY_PATH>
+            </environmentVariables>
+        </configuration>
+        -->
     </dependencies>
 
     <build>

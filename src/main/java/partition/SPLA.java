@@ -121,6 +121,5 @@ public class SPLA {
         return returnCommunities;
     }
 
-
 }
 
