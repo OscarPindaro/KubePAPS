@@ -15,13 +15,13 @@ public class InputParser {
 
 
 
-    public InputParser(String pathToFile) throws FileNotFoundException {
+    public InputParser(String pathToFile, int numberOfNodes) throws FileNotFoundException {
+
         this.file = new File(pathToFile);
         this.input = new Scanner(file);
         this.nodes = new LinkedList<>();
-        this.delayMatrix = new float[4][5];
+        this.delayMatrix = new float[numberOfNodes][numberOfNodes];
 
-        this.ParseFile();
     }
 
 
@@ -54,6 +54,7 @@ public class InputParser {
         String path = "input.txt";
         try {
             InputParser parser = new InputParser(path);
+            parser.parseFile();
             for (String node: parser.getNodes()) {
                 System.out.println(node);
                 float[] delays = parser.getDelayMatrix()[parser.getNodes().indexOf(node)];
