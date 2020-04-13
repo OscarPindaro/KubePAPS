@@ -7,7 +7,7 @@ import java.util.*;
 public class SLPA_Node {
 
     // attributes
-    private final V1Node kubeNode;
+    private final V1Node kubeNode;  //kubernetes related object
     private final String nodeID;
     private String labelToSpread;   //label that the node is going to spread, set up checking the memory
     private final Memory memory;    //used to save all the labels received by other nodes

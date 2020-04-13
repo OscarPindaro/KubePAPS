@@ -7,7 +7,7 @@ import java.util.*;
 
 public class SLPA {
 
-    private List<SLPA_Node> topologyNodes;
+    private List<SLPA_Node> topologyNodes;  //list of all tje nodes present in the topology
 
     // constructor
     public SLPA(float[][] delayMatrix, float delayThreshold) throws io.kubernetes.client.ApiException {
@@ -41,7 +41,8 @@ public class SLPA {
 
     }
 
-
+    // function used to create and set up Kubernetes communities, returns a list with all the communities created.
+    // a community will contain information about members and leader.
     public List<Community> computeCommunities(int numberOfIterations, float probabilityThreshold) {
 
         List<Community> returnCommunities = new LinkedList<>();
@@ -52,7 +53,7 @@ public class SLPA {
         // algorithm evolution, spread labels for a given number of iterations, ideal number is 20 iterations
         for (int i = 0; i < numberOfIterations ; i++) {
 
-            Collections.shuffle(listenerOrder);
+            Collections.shuffle(listenerOrder);     // shuffle the list to better spread labels
 
             for (SLPA_Node listener : listenerOrder) {
 
@@ -63,7 +64,7 @@ public class SLPA {
                     throw new NullPointerException("This listener has no nearby nodes, speaker list is empty");
                 }
                 else{
-                    Collections.shuffle(speakers);
+                    Collections.shuffle(speakers);      // shuffle the list to better spread labels
                 }
 
                 for (SLPA_Node speaker : speakers) {
@@ -80,9 +81,12 @@ public class SLPA {
         // post processing to set the communities
         for (SLPA_Node node : topologyNodes) {
 
+            // get all the different labels received
             Set<String> communityCandidates = node.getMemory().getDifferentReceivedLabels();
 
             communityCandidates.removeIf(label -> node.computeOccurrenceProbability(label) < probabilityThreshold);
+
+            // convert the set into an array to manipulate it
             String[] array = new String[communityCandidates.size()];
             communityCandidates.toArray(array);
 
