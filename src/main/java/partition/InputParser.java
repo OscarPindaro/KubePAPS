@@ -34,8 +34,6 @@ public class InputParser {
         int i = 0;
         int j = 0;
         this.nodes.add(input.next());
-        System.out.println("nodes");
-        System.out.println(nodes);
         while (input.hasNext()) {
             if (input.hasNextFloat()) {
                 this.delayMatrix[i][j] = input.nextFloat();
@@ -53,7 +51,7 @@ public class InputParser {
 /*
     public static void main(String[] args) {
 
-        String path = "/home/fabio/Scrivania/input.txt";
+        String path = "input.txt";
         try {
             InputParser parser = new InputParser(path);
             for (String node: parser.getNodes()) {
