@@ -11,11 +11,7 @@ public class SLPA {
     private List<SLPA_Node> topologyNodes;  //list of all tje nodes present in the topology
 
     // constructor
-<<<<<<< HEAD:src/main/java/partition/SPLA.java
-    public SPLA(float[][] delayMatrix, float delayThreshold) throws ApiException {
-=======
     public SLPA(float[][] delayMatrix, float delayThreshold) throws io.kubernetes.client.ApiException {
->>>>>>> cea1b4a8f84d9fbbb1be95963c5c1e08c02552f9:src/main/java/partition/SLPA.java
 
         List<V1Node> kubeNodes = KubeApi.getNodeList();
         kubeNodes.sort(Comparator.comparing(a -> a.getMetadata().getName()));
