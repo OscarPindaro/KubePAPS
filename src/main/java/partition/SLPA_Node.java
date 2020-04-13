@@ -4,17 +4,17 @@ import io.kubernetes.client.models.V1Node;
 
 import java.util.*;
 
-public class SPLA_Node {
+public class SLPA_Node {
 
     // attributes
     private final V1Node kubeNode;
     private final String nodeID;
     private String labelToSpread;   //label that the node is going to spread, set up checking the memory
     private final Memory memory;    //used to save all the labels received by other nodes
-    private final List<SPLA_Node> nearbyNodes;    //store all the connected nodes, used to set speakers
+    private final List<SLPA_Node> nearbyNodes;    //store all the connected nodes, used to set speakers
 
     // constructor
-    public SPLA_Node(V1Node node) {
+    public SLPA_Node(V1Node node) {
 
         this.kubeNode = node;
         this.nodeID = kubeNode.getMetadata().getName();
@@ -59,9 +59,9 @@ public class SPLA_Node {
         this.memory.updateMemory(labelToAdd);
     }
 
-    public List<SPLA_Node> getNearbyNodes() { return new LinkedList<SPLA_Node>(nearbyNodes); }
+    public List<SLPA_Node> getNearbyNodes() { return new LinkedList<SLPA_Node>(nearbyNodes); }
 
-    public void addNearbyNode(SPLA_Node nearbyNode) { this.nearbyNodes.add(nearbyNode); }
+    public void addNearbyNode(SLPA_Node nearbyNode) { this.nearbyNodes.add(nearbyNode); }
 
 
 
