@@ -6,7 +6,6 @@ import network.MemberMessage;
 import service.Service;
 import service.ServiceCatalog;
 import service.ServiceWorkload;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -74,7 +73,7 @@ public class CommunityProtocol extends MemberStateHolder{
     }
 
     private void processLeaderMessage(){
-        throw new NotImplementedException();
+        throw new RuntimeException();
     }
 
 }

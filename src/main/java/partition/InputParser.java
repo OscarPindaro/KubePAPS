@@ -48,12 +48,11 @@ public class InputParser {
     }
 
 
-/*
     public static void main(String[] args) {
 
         String path = "input.txt";
         try {
-            InputParser parser = new InputParser(path);
+            InputParser parser = new InputParser(path, 4);
             parser.parseFile();
             for (String node: parser.getNodes()) {
                 System.out.println(node);
@@ -67,7 +66,6 @@ public class InputParser {
         }
 
     }
-*/
 
 }
 
