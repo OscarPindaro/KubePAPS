@@ -21,7 +21,7 @@ public class InputParser {
         this.input = new Scanner(file);
         this.nodes = new LinkedList<>();
         this.delayMatrix = new float[numberOfNodes][numberOfNodes];
-
+        
     }
 
 
@@ -30,7 +30,7 @@ public class InputParser {
     public List<String> getNodes() { return nodes; }
 
 
-    public void ParseFile(){
+    public void parseFile(){
         int i = 0;
         int j = 0;
         this.nodes.add(input.next());
