@@ -16,10 +16,11 @@ import io.kubernetes.client.util.KubeConfig;
 import kubernetesApiWrapper.KubeApi;
 
 import java.io.FileReader;
+import java.util.List;
 
 public class prova {
 
-    public static void main(String[] args)  throws Exception{
+    public static void main1(String[] args)  throws Exception{
         KubeApi.setUpApi("/home/oscar/.kube/config");
         CoreV1Api coreApi = new CoreV1Api();
         AppsV1Api appsApi = new AppsV1Api();
@@ -60,6 +61,35 @@ public class prova {
             appsApi.replaceNamespacedReplicaSet(replicaSet.getMetadata().getName(), "default", replicaSet, null, null);
         }
 
+    }
+
+    public static void main(String[] args) throws Exception {
+        // file path to your KubeConfig
+        String kubeConfigPath = "/home/oscar/.kube/config";
+
+        // loading the out-of-cluster config, a kubeconfig from file-system
+        ApiClient client =
+                ClientBuilder.kubeconfig(KubeConfig.loadKubeConfig(new FileReader(kubeConfigPath))).build();
+
+
+        // set the global default api-client to the in-cluster one from above
+        Configuration.setDefaultApiClient(client);
+
+
+        CoreV1Api coreApi = new CoreV1Api();
+        AppsV1Api appsApi = new AppsV1Api();
+
+        V1PodList list =
+                coreApi.listPodForAllNamespaces(null, null, null, null, null, null, null, null, null);
+
+        for(V1Pod pod : list.getItems()){
+
+            System.out.println(pod.getMetadata().getNamespace());
+        }
+
+//        V1DeploymentList depList = appsApi.listDeploymentForAllNamespaces(null, null, null,
+//                null, null, null, null, null, null );
+        //System.out.println(depList.getItems());
     }
 
     public static void proveVarie(String[] args) throws Exception{
