@@ -13,7 +13,7 @@ public class Community {
     private final static String ROLE_KEY= "role";
     private final static String COMMUNITY_KEY= "community";
 
-    private final String name;
+    private String name;
 
     private V1Node leader;
 
@@ -26,6 +26,7 @@ public class Community {
     }
 
     public void addLeader(V1Node node){
+        if (leader != null) throw  new RuntimeException("The leader was already set");
         this.leader = node;
         setRoleLabel(node, Role.LEADER);
         setCommunityLabel(node);
@@ -48,6 +49,19 @@ public class Community {
         V1ObjectMeta metadata = node.getMetadata();
         metadata = metadata.putLabelsItem(COMMUNITY_KEY, this.name);
         node.setMetadata(metadata);
+    }
+
+    public void setName(String newName){
+        this.name = newName;
+    }
+
+    /**
+     * @return a list containing members and the leader;
+     */
+    public List<V1Node> getAllMembers(){
+        List<V1Node> allMembers = new LinkedList<>(members);
+        allMembers.add(leader);
+        return allMembers;
     }
 
     public void loadOnKube() throws ApiException {

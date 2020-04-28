@@ -44,7 +44,7 @@ public class SLPA {
 
     // function used to create and set up Kubernetes communities, returns a list with all the communities created.
     // a community will contain information about members and leader.
-    public List<Community> computeCommunities(int numberOfIterations, float probabilityThreshold) {
+    public List<Community> computeCommunities(int numberOfIterations, float probabilityThreshold, int maxSize) {
 
         List<Community> returnCommunities = new LinkedList<>();
         CommunityBuilder communityBuilder = new CommunityBuilder();
@@ -129,8 +129,19 @@ public class SLPA {
 
         }
 
+        returnCommunities = shrinkCommunities(returnCommunities, maxSize);
+
         return returnCommunities;
     }
 
+    private List<Community> shrinkCommunities(List<Community> communities, int maxSize){
+        List<Community> returnCommunities = new LinkedList<>();
+        for(Community community: communities){
+            List<Community> decomposed = CommunityBuilder.decomposeCommunity(community, maxSize);
+            returnCommunities.addAll(decomposed);
+        }
+
+        return returnCommunities;
+    }
 }
 
