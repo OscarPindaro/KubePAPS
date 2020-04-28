@@ -60,7 +60,8 @@ public class Community {
      */
     public List<V1Node> getAllMembers(){
         List<V1Node> allMembers = new LinkedList<>(members);
-        allMembers.add(leader);
+        if(leader != null)
+            allMembers.add(leader);
         return allMembers;
     }
 

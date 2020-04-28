@@ -1,6 +1,8 @@
 package partition;
 
 import io.kubernetes.client.models.V1Node;
+import io.kubernetes.client.models.V1ObjectMeta;
+import io.kubernetes.client.proto.V1;
 
 import java.util.*;
 
@@ -48,8 +50,8 @@ public class CommunityBuilder {
             Community selected = communities.get(i%nOfCommunities);
             if ( i < nOfCommunities){
                 V1Node leader = allMembers.get(i);
-                addLeader(selected,  leader);
                 selected.setName(leader.getMetadata().getName());
+                addLeader(selected,  leader);
             }
             else{
                 addMember(selected, allMembers.get(i));
@@ -65,5 +67,34 @@ public class CommunityBuilder {
 
     private static void addMember(Community community, V1Node member){
         community.addMember(member);
+    }
+
+
+    //TODO test da cancellareeee
+    //sembra funzionare tutto, c'era un problema in cui il leader non aveva la label della community, ma risolto.
+    public static void main(String[] args) {
+
+        Community community = new Community("prova");
+        V1Node leader = new V1Node();
+        leader.setMetadata(new V1ObjectMeta());
+        leader.getMetadata().setName("leader");
+        community.addLeader(leader);
+        for(int i = 0; i < 7; i++){
+            V1Node member = new V1Node();
+            member.setMetadata(new V1ObjectMeta());
+            member.getMetadata().setName("member" + i);
+            community.addMember(member);
+        }
+
+        List<Community> littleCommunities = CommunityBuilder.decomposeCommunity(community, 5);
+        for(Community com: littleCommunities){
+            List<V1Node> nodes = com.getAllMembers();
+            System.out.println(com + "  SIZE: " + com.getAllMembers().size());
+            for(V1Node node : nodes){
+                System.out.println("name: " +node.getMetadata().getName() + "\nrole: " + node.getMetadata().getLabels());
+            }
+            System.out.println();
+
+        }
     }
 }
