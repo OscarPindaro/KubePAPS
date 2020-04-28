@@ -1,6 +1,7 @@
 package partition;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CommunityBuilder {
@@ -21,5 +22,9 @@ public class CommunityBuilder {
             return community;
         }
 
+    }
+
+    public List<Community>  decomposeCommunity(Community community, int maxSize){
+        community.
     }
 }

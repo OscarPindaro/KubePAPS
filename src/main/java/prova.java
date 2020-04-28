@@ -20,6 +20,11 @@ import java.util.List;
 
 public class prova {
 
+    public static void main1(){
+
+    }
+
+
     public static void main1(String[] args)  throws Exception{
         KubeApi.setUpApi("/home/oscar/.kube/config");
         CoreV1Api coreApi = new CoreV1Api();
