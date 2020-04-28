@@ -36,7 +36,10 @@ public class CommunityBuilder {
     public static List<Community>  decomposeCommunity(Community community, int maxSize){
         List<V1Node> allMembers = community.getAllMembers();
         //if i have 12 members, and the max capacity is 5, the number of subCommunities is 12/5 + 1 = 2 + 1 = 3
-        int nOfCommunities = allMembers.size() / maxSize + 1;
+        int nOfCommunities = allMembers.size() / maxSize;
+        if(allMembers.size()%maxSize != 0){
+            nOfCommunities += 1;
+        }
 
         List<Community> communities = new ArrayList<>(nOfCommunities);
         //create nOfCommunities communities
@@ -79,13 +82,14 @@ public class CommunityBuilder {
         leader.setMetadata(new V1ObjectMeta());
         leader.getMetadata().setName("leader");
         community.addLeader(leader);
-        for(int i = 0; i < 7; i++){
+        for(int i = 0; i < 4; i++){
             V1Node member = new V1Node();
             member.setMetadata(new V1ObjectMeta());
             member.getMetadata().setName("member" + i);
             community.addMember(member);
         }
 
+        System.out.println(community.getAllMembers().size());
         List<Community> littleCommunities = CommunityBuilder.decomposeCommunity(community, 5);
         for(Community com: littleCommunities){
             List<V1Node> nodes = com.getAllMembers();
