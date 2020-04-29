@@ -11,6 +11,7 @@ public class SLPA {
 
     private List<SLPA_Node> topologyNodes;  //list of all tje nodes present in the topology
 
+/*
     public SLPA(float[][] delayMatrix, float delayThreshold, List<String> hosts) throws io.kubernetes.client.ApiException, RuntimeException {
         createTopologyNodesList(hosts);
         computeTopologyMatrix(delayMatrix, delayThreshold);
@@ -23,6 +24,25 @@ public class SLPA {
         for(String hostname : hosts){
             if(!kubeHostNames.contains(hostname))
                 throw new RuntimeException("This host is not in the kubernetes cluster");
+
+            V1Node node = getNode(kubeNodes, hostname);
+            topologyNodes.add(new SLPA_Node(node));
+        }
+    }
+*/
+////////TESTING PART-NOT CONNECTED TO KUBERNETES\\\\\\\\\\\
+    public SLPA(float[][] delayMatrix, float delayThreshold, List<String> hosts, List<V1Node> kubeNodes) {
+        createTopologyNodesList(hosts, kubeNodes);
+        computeTopologyMatrix(delayMatrix, delayThreshold);
+    }
+
+    private void createTopologyNodesList(List<String> hosts, List<V1Node> kubeNodes) {
+        List<String> kubeHostNames = kubeNodes.stream().map(k -> k.getMetadata().getName()).collect(Collectors.toList());
+        System.out.println(kubeHostNames);
+        topologyNodes = new LinkedList<>();
+        for (String hostname : hosts) {
+            if (!kubeHostNames.contains(hostname))
+                throw new RuntimeException("Host "+hostname+" is not in the kubernetes cluster");
 
             V1Node node = getNode(kubeNodes, hostname);
             topologyNodes.add(new SLPA_Node(node));
@@ -42,9 +62,11 @@ public class SLPA {
 
         for (int i = 0; i < delayMatrix.length ; i++) {
             for (int j = i; j < delayMatrix[i].length; j++) {
-                if (delayMatrix[i][j] < delayThreshold){
-                    topologyNodes.get(i).addNearbyNode(topologyNodes.get(j));
-                    topologyNodes.get(j).addNearbyNode(topologyNodes.get(i));
+                if (i != j) {
+                    if ((delayMatrix[i][j] < delayThreshold) && (delayMatrix[i][j] > 0)) {
+                        topologyNodes.get(i).addNearbyNode(topologyNodes.get(j));
+                        topologyNodes.get(j).addNearbyNode(topologyNodes.get(i));
+                    }
                 }
             }
         }
@@ -118,7 +140,7 @@ public class SLPA {
             else if (communityCandidates.size() > 1){
                 // part of the code to manage overlapping nodes
                 // in this case we just pick the first one of the list (same code as if case)
-                String communitySelected = array[0];
+                String communitySelected = array[new Random().nextInt(communityCandidates.size())];
                 Community selectedCommunity = communityBuilder.getCommunity(communitySelected);
                 if (node.getNodeID().equals(communitySelected)){
                     selectedCommunity.addLeader(node.getKubeNode());
@@ -138,7 +160,9 @@ public class SLPA {
 
         }
 
+        //System.out.println("prima: "+returnCommunities.size());
         returnCommunities = shrinkCommunities(returnCommunities, maxSize);
+        //System.out.println("dopo: "+returnCommunities.size());
 
         return returnCommunities;
     }

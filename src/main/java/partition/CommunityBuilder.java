@@ -4,6 +4,9 @@ import io.kubernetes.client.models.V1Node;
 import io.kubernetes.client.models.V1ObjectMeta;
 import io.kubernetes.client.proto.V1;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class CommunityBuilder {
@@ -76,29 +79,42 @@ public class CommunityBuilder {
     //TODO test da cancellareeee
     //sembra funzionare tutto, c'era un problema in cui il leader non aveva la label della community, ma risolto.
     public static void main(String[] args) {
-
-        Community community = new Community("prova");
-        V1Node leader = new V1Node();
-        leader.setMetadata(new V1ObjectMeta());
-        leader.getMetadata().setName("leader");
-        community.addLeader(leader);
-        for(int i = 0; i < 4; i++){
-            V1Node member = new V1Node();
-            member.setMetadata(new V1ObjectMeta());
-            member.getMetadata().setName("member" + i);
-            community.addMember(member);
+        List<V1Node> mockNodes = new LinkedList<>();
+        for (int i = 1; i < 55; i++) {
+            V1Node node = new V1Node();
+            node.setMetadata(new V1ObjectMeta());
+            node.getMetadata().setName("Node" + i);
+            mockNodes.add(node);
         }
+        try {
+            String contents = new String(Files.readAllBytes(Paths.get("/home/fabio/Scaricati/Fab.txt")));
+            InputParser parser = new InputParser(contents);
+            parser.parseFile();
+            System.out.println("numberOfNodes: " + parser.getNumberOfNodes());
+            System.out.println("numberOfIterations: " + parser.getNumberOfIterations());
+            System.out.println("delayThreshold: " + parser.getDelayThreshold());
+            System.out.println("probabilityThreshold: " + parser.getProbabilityThreshold());
+            System.out.println("delayMatrix: " + parser.getDelayMatrix().length);
+            System.out.println("nodes: " + parser.getNodes());
+            System.out.println("maxSize: "+ parser.getMaxSize());
 
-        System.out.println(community.getAllMembers().size());
-        List<Community> littleCommunities = CommunityBuilder.decomposeCommunity(community, 5);
-        for(Community com: littleCommunities){
-            List<V1Node> nodes = com.getAllMembers();
-            System.out.println(com + "  SIZE: " + com.getAllMembers().size());
-            for(V1Node node : nodes){
-                System.out.println("name: " +node.getMetadata().getName() + "\nrole: " + node.getMetadata().getLabels());
+            SLPA partition = new SLPA(parser.getDelayMatrix(), parser.getDelayThreshold(), parser.getNodes(), mockNodes);
+            List<Community> communities;
+            communities = partition.computeCommunities(parser.getNumberOfIterations(), parser.getProbabilityThreshold(), parser.getMaxSize());
+            for(Community c : communities){
+                List<V1Node> nodes = c.getAllMembers();
+                System.out.println("community: "+c.getName());
+                for(V1Node v : nodes){
+                    System.out.println(v.getMetadata().getName());
+                }
+                System.out.println();
             }
-            System.out.println();
-            
+
+        } catch (IOException ex) {
+            ex.notify();
         }
+
+
+
     }
 }

@@ -45,7 +45,7 @@ public class SLPA_Node {
         int selectionValue = new Random().nextInt(memory.getTotLabelReceived());
         int sum = 0;
         int pos = 0;
-        while( sum < selectionValue){
+        while( sum <= selectionValue){
             pos++;
             sum += memory.getOccurrences(sortedLabels.get(pos-1));
         }

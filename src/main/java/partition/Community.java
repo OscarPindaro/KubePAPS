@@ -25,6 +25,10 @@ public class Community {
         members = new LinkedList<>();
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void addLeader(V1Node node){
         if (leader != null) throw  new RuntimeException("The leader was already set");
         this.leader = node;
