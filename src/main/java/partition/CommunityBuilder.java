@@ -98,7 +98,7 @@ public class CommunityBuilder {
                 System.out.println("name: " +node.getMetadata().getName() + "\nrole: " + node.getMetadata().getLabels());
             }
             System.out.println();
-
+            
         }
     }
 }
