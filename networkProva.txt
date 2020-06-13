@@ -1,0 +1,23 @@
+#PARAMETERS
+NumberOfNodes 15
+DelayThreshold 2
+NumberOfIterations 20
+ProbabilityThreshold 0,35
+MaxSize 5
+
+#DELAY_MATRIX
+Node1    0	1	1	0	0	0	0	0	0	0	0	0	0	0	0
+Node2    1	0	1	0	0	0	0	0	0	0	0	0	0	0	0
+Node3    1	1	0	1	0	0	0	0	0	0	0	0	0	0	0
+Node4    0	0	1	0	1	1	0	0	1	0	0	0	0	0	0
+Node5    0	0	0	1	0	0	0	0	0	0	0	0	0	0	0
+Node6    0	0	0	1	0	0	1	1	0	0	0	0	0	0	0
+Node7    0	0	0	0	0	1	0	1	0	0	0	0	0	0	0
+Node8    0	0	0	0	0	1	1	0	0	0	0	0	0	0	0
+Node9    0	0	0	1	0	0	0	0	0	1	0	0	0	1	0
+Node10   0	0	0	0	0	0	0	0	1	0	1	0	0	0	0
+Node11   0	0	0	0	0	0	0	0	0	1	0	1	0	0	0
+Node12   0	0	0	0	0	0	0	0	0	0	1	0	1	0	1
+Node13   0	0	0	0	0	0	0	0	0	0	0	1	0	1	0
+Node14   0	0	0	0	0	0	0	0	1	0	0	0	1	0	1
+Node15   0	0	0	0	0	0	0	0	0	0	0	1	0	1	0

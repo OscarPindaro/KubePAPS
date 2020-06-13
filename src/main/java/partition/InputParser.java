@@ -98,7 +98,7 @@ public class InputParser {
                             this.maxSize = input.nextInt();
                             break;
                         default:
-                            throw new RuntimeException("unknown parameter");
+                            throw new RuntimeException("unknown parameter " + nextParameter);
                     }
                     nextParameter = input.next();
                 }

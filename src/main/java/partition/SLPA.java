@@ -38,7 +38,7 @@ public class SLPA {
 
     private void createTopologyNodesList(List<String> hosts, List<V1Node> kubeNodes) {
         List<String> kubeHostNames = kubeNodes.stream().map(k -> k.getMetadata().getName()).collect(Collectors.toList());
-        System.out.println(kubeHostNames);
+        //System.out.println(kubeHostNames);
         topologyNodes = new LinkedList<>();
         for (String hostname : hosts) {
             if (!kubeHostNames.contains(hostname))

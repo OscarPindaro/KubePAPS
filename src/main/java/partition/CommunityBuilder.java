@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CommunityBuilder {
 
@@ -78,16 +79,16 @@ public class CommunityBuilder {
 
     //TODO test da cancellareeee
     //sembra funzionare tutto, c'era un problema in cui il leader non aveva la label della community, ma risolto.
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         List<V1Node> mockNodes = new LinkedList<>();
-        for (int i = 1; i < 55; i++) {
+        for (int i = 1; i <= 15; i++) {
             V1Node node = new V1Node();
             node.setMetadata(new V1ObjectMeta());
             node.getMetadata().setName("Node" + i);
             mockNodes.add(node);
         }
         try {
-            String contents = new String(Files.readAllBytes(Paths.get("/home/fabio/Scaricati/Fab.txt")));
+            String contents = new String(Files.readAllBytes(Paths.get("/home/oscar/KubePAPS/networkProva.txt")));
             InputParser parser = new InputParser(contents);
             parser.parseFile();
             System.out.println("numberOfNodes: " + parser.getNumberOfNodes());
@@ -113,6 +114,67 @@ public class CommunityBuilder {
         } catch (IOException ex) {
             ex.notify();
         }
+
+    }
+
+    public static void main(String[] args) {
+        int[] nodesNumber = {10, 20, 50, 100, 200, 500, 1000, 2000, 5000};
+        float[] delayThreshold = {0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f};
+        int[] maxSize = {10, 25, 50 };
+        Random random = new Random(1234567890);
+
+        System.out.println("Number of nodes\tDelay Threshold\tMaxSize\tWorstTimeElapsed\tMediumTimeElapsed");
+        for(int nodes = 0; nodes < nodesNumber.length; nodes++){
+            for (int delay = 0; delay < delayThreshold.length; delay++){
+                for(int size = 0; size < maxSize.length; size++){
+                    try{
+                        if(maxSize[size] > nodesNumber[nodes]) throw new Exception("too little");
+                        if ( maxSize[size] <= nodesNumber[nodes]){
+
+                            //matrix creation
+                            float[][] delayMatrix = new float[nodesNumber[nodes]][nodesNumber[nodes]];
+                            for(int a =0; a < nodesNumber[nodes]; a++){
+                                for(int b = a; b < nodesNumber[nodes]; b++){
+                                    delayMatrix[a][b] = random.nextFloat();
+                                }
+                            }
+                            //creatin of mock nodes
+                            List<V1Node> mockNodes = new LinkedList<>();
+                            for (int c = 1; c <= nodesNumber[nodes]; c++) {
+                                V1Node node = new V1Node();
+                                node.setMetadata(new V1ObjectMeta());
+                                node.getMetadata().setName("Node" + c);
+                                mockNodes.add(node);
+                            }
+
+                            long mean;
+                            long sum = 0;
+                            long worstCase = -1;
+                            int TENTATIVI = 20;
+                            for( int tentativi = 0; tentativi< TENTATIVI; tentativi++){
+                                long start = System.currentTimeMillis();
+                                SLPA partition = new SLPA(delayMatrix, delayThreshold[delay], mockNodes.stream().map(s -> s.getMetadata().getName()).collect(Collectors.toList()), mockNodes);
+                                partition.computeCommunities(20, 0.35f, maxSize[size]);
+                                long end = System.currentTimeMillis();
+                                long total = end -start;
+                                sum = sum + total;
+                                if(total > worstCase){
+                                    worstCase = total;
+                                }
+                            }
+
+                            mean = sum / TENTATIVI;
+                            System.out.println(nodesNumber[nodes]+"\t" + delayThreshold[delay] +"\t" + maxSize[size]+ "\t" + worstCase +"\t" + mean);
+                        }
+                    }
+                    catch (Exception ex){
+                        System.out.println(nodesNumber[nodes]+"\t" + delayThreshold[delay] +"\t" + maxSize[size]+ "\t" + "XXX" +"\tYYY");
+                    }
+
+                }
+            }
+        }
+
 
 
 
