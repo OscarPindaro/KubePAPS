@@ -119,11 +119,11 @@ public class CommunityBuilder {
 
     public static void main(String[] args) {
         int[] nodesNumber = {10, 20, 50, 100, 200, 500, 1000, 2000, 5000};
-        float[] delayThreshold = {0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f};
+        float[] delayThreshold = {0.1f, 0.3f, 0.5f, 0.7f};
         int[] maxSize = {10, 25, 50 };
         Random random = new Random(1234567890);
 
-        System.out.println("Number of nodes\tDelay Threshold\tMaxSize\tWorstTimeElapsed\tMediumTimeElapsed");
+        System.out.println("Number of nodes\tDelay Threshold\tMaxSize\tWorstTimeElapsed\tMediumTimeElapsed\tMediana");
         for(int nodes = 0; nodes < nodesNumber.length; nodes++){
             for (int delay = 0; delay < delayThreshold.length; delay++){
                 for(int size = 0; size < maxSize.length; size++){
@@ -150,7 +150,8 @@ public class CommunityBuilder {
                             long mean;
                             long sum = 0;
                             long worstCase = -1;
-                            int TENTATIVI = 20;
+                            int TENTATIVI = 10;
+                            long[] risultati = new long[TENTATIVI];
                             for( int tentativi = 0; tentativi< TENTATIVI; tentativi++){
                                 long start = System.currentTimeMillis();
                                 SLPA partition = new SLPA(delayMatrix, delayThreshold[delay], mockNodes.stream().map(s -> s.getMetadata().getName()).collect(Collectors.toList()), mockNodes);
@@ -158,17 +159,19 @@ public class CommunityBuilder {
                                 long end = System.currentTimeMillis();
                                 long total = end -start;
                                 sum = sum + total;
+                                risultati[tentativi] = total;
                                 if(total > worstCase){
                                     worstCase = total;
                                 }
                             }
 
                             mean = sum / TENTATIVI;
-                            System.out.println(nodesNumber[nodes]+"\t" + delayThreshold[delay] +"\t" + maxSize[size]+ "\t" + worstCase +"\t" + mean);
-                        }
+                            long mediana = risultati[TENTATIVI/2];
+                            System.out.println(nodesNumber[nodes]+"\t" + delayThreshold[delay] +"\t" + maxSize[size]+ "\t" + worstCase +"\t" + mean +"\t" + mediana);
+                    }
                     }
                     catch (Exception ex){
-                        System.out.println(nodesNumber[nodes]+"\t" + delayThreshold[delay] +"\t" + maxSize[size]+ "\t" + "XXX" +"\tYYY");
+                        System.out.println(nodesNumber[nodes]+"\t" + delayThreshold[delay] +"\t" + maxSize[size]+ "\t" + "XXX" +"\tYYY" +"\tZZZ");
                     }
 
                 }
